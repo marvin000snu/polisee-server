@@ -1,13 +1,14 @@
   
-const mysql = require("mysql2/promise")
+const mysql = require("mysql2/promise");
+const { env } = require("process");
 require('dotenv').config();
 
 const Pool = mysql.createPool({
     timezone:"+09:00",
-    host: "testdb.clznfcoodcl1.ap-northeast-2.rds.amazonaws.com",
-    user: "admin",
-    password: "dirndirn",
-    database: "test",
+    host: env.DB_HOST,
+    user: env.DB_USER,
+    password: env.DB_PASSWORD,
+    // database: "test",
     port: 3306
 });
 

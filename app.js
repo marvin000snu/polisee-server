@@ -1,6 +1,6 @@
 const cors = require("cors");
 const express = require("express");
-// const apiRouter = require("./routes/api-router");
+const apiRouter = require("./router/api-router");
 const app = express();
 var bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
@@ -11,10 +11,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 require("dotenv").config();
+ 
+app.use("/api", apiRouter);
 
-// app.use("/api", apiRouter);
-
-//app.use(cors())/
+//app.use(cors())
 // app.use("/", (err, req, res, next) => {
 //   let transporter = nodemailer.createTransport({
 //     // 사용하고자 하는 서비스, gmail계정으로 전송할 예정이기에 'gmail'
