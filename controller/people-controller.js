@@ -30,7 +30,27 @@ const getMainAttendData  = async function (req,res,next){
   }
 }
 
+const getSubAttendData  = async function (req,res,next){
+  const connection = await Pool.getConnection();
+  try{
+    const id = req.params.id;
+    const [[result]] = await connection.query("SELECT * FROM LAWDATA.people where id=?", [id]);
+    res.status(200).json({
+      attend : (result["sub-attend"].slice(1,-1).split(",")).map((v)=>{return v.replace(/"/gi,"")}),
+      notAttend : (result["sub-notattend"].slice(1,-1).split(",")).map((v)=>{return v.replace(/"/gi,"")}),
+      work : (result["sub-work"].slice(1,-1).split(",")).map((v)=>{return v.replace(/"/gi,"")}),
+      home : (result["sub-home"].slice(1,-1).split(",")).map((v)=>{return v.replace(/"/gi,"")}),
+      name : result["name"]
+    })
+  }catch(err){
+    console.log(err)
+  }finally{
+    connection.release();
+  }
+}
+
 module.exports = {
   getAllPeople,
-  getMainAttendData
+  getMainAttendData,
+  getSubAttendData
 };
