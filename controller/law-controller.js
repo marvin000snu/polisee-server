@@ -45,9 +45,30 @@ const team = async function (req, res, next) {
   }
 };
 
+const vote = async function (req, res, next) {
+  const connection = await Pool.getConnection();
+  try {
+    const id = req.params.id;
+    const [[result]] = await connection.query(
+      "SELECT `agree`, `disagree`, `notattend`, `drop` FROM LAWDATA.law WHERE billNo  =  ?", [id]);
+    res.status(200).json({
+      agree : JSON.parse(result.agree),
+      disagree : JSON.parse(result.disagree),
+      notAttend : JSON.parse(result.notattend),
+      drop : JSON.parse(result.drop),
+      
+    });
+  } catch (err) {
+    console.log(err);
+  } finally {
+    connection.release();
+  }
+};
+
 
 module.exports = {
   search,
   lead,
-  team
+  team,
+  vote
 };
