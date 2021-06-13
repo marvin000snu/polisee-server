@@ -65,6 +65,18 @@ const vote = async function (req, res, next) {
   }
 };
 
+const preview = async function (req, res, next) {
+  const connection = await Pool.getConnection();
+  try{
+    const [result] = await connection.query("SELECT * FROM LAWDATA.law order by rand() limit 12;")
+    res.status(200).json(result);
+  }catch (err) {
+    console.log(err);
+  }finally{
+    connection.release();
+  }
+}
+
 
 module.exports = {
   search,
