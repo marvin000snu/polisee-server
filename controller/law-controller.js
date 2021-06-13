@@ -82,5 +82,6 @@ module.exports = {
   search,
   lead,
   team,
-  vote
+  vote,
+  preview
 };
