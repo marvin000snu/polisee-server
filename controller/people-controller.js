@@ -49,8 +49,23 @@ const getSubAttendData  = async function (req,res,next){
   }
 }
 
+const getAttendRate = async function (req,res,next){
+  const connection = await Pool.getConnection();
+  try{
+    const id = req.params.id;
+    const [[result]] = await connection.query("SELECT `main-attend-rate`, `sub-attend-rate` FROM LAWDATA.people where id=?",[id])
+    console.log(result)
+    res.status(200).json(result)
+  }catch(err){
+    console.log(err)
+  }finally{
+    connection.release();
+  }
+}
+
 module.exports = {
   getAllPeople,
   getMainAttendData,
-  getSubAttendData
+  getSubAttendData,
+  getAttendRate
 };
