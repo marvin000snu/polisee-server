@@ -92,7 +92,7 @@ const today = async function (req, res, next) {
       "SELECT law.group, COUNT(billNo) AS cnt FROM LAWDATA.law where generalResult='수정가결' or generalResult='원안가결' or generalResult='대안반영폐기' GROUP BY law.group "
     );
     console.log(result);
-    res.status(200).json({ result: result.slice(2), response: response.slice(1) });
+    res.status(200).json({ result: result.slice(2).sort((a,b)=>{return a.group.localeCompare(b.group)}), response: response.slice(1).sort((a,b)=>{return a.group.localeCompare(b.group)}) });
   } catch (err) {
     console.log(err);
   } finally {
