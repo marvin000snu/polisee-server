@@ -92,7 +92,38 @@ const today = async function (req, res, next) {
       "SELECT law.group, COUNT(billNo) AS cnt FROM LAWDATA.law where generalResult='수정가결' or generalResult='원안가결' or generalResult='대안반영폐기' GROUP BY law.group "
     );
     console.log(result);
-    res.status(200).json({ result: result.slice(2).sort((a,b)=>{return a.group.localeCompare(b.group)}), response: response.slice(1).sort((a,b)=>{return a.group.localeCompare(b.group)}) });
+    res.status(200).json({
+      result: result.slice(2).sort((a, b) => {
+        return a.group.localeCompare(b.group);
+      }),
+      response: response.slice(1).sort((a, b) => {
+        return a.group.localeCompare(b.group);
+      })
+    });
+  } catch (err) {
+    console.log(err);
+  } finally {
+    connection.release();
+  }
+};
+
+const party = async function (req, res, next) {
+  const connection = await Pool.getConnection();
+  try {
+    const [result] = await connection.query(
+      "SELECT people.party, COUNT(billNo) FROM LAWDATA.law join LAWDATA.people on law.`lead` = people.name Group by people.party"
+    );
+    const [response] = await connection.query(
+      "SELECT people.party, COUNT(billNo) FROM LAWDATA.law join LAWDATA.people on law.`lead` = people.name where law.generalResult='수정가결' or law.generalResult='원안가결' or law.generalResult='대안반영폐기'Group by people.party;"
+    );
+    res.status(200).json({
+      result: result.sort((a, b) => {
+        return a.party.localeCompare(b.party);
+      }),
+      response: response.sort((a, b) => {
+        return a.party.localeCompare(b.party);
+      })
+    });
   } catch (err) {
     console.log(err);
   } finally {
@@ -106,5 +137,6 @@ module.exports = {
   team,
   vote,
   preview,
-  today
+  today,
+  party
 };
