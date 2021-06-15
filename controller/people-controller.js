@@ -62,10 +62,23 @@ const getAttendRate = async function (req,res,next){
     connection.release();
   }
 }
-
+const grade = async function (req, res, next) {
+  const connection = await Pool.getConnection();
+  try{
+    const id = req.params.id;
+    const [[result]] = await connection.query("SELECT `sub-attend-rate`, `main-attend-rate`,`id_` FROM LAWDATA.people where id =?;",[id]);
+    const [respond] = await connection.query("SELECT `generalResult` FROM LAWDATA.law where `lead-code` = ?",[result.id_]);
+    res.status(200).json({sub : result["sub-attend-rate"],main:result["main-attend-rate"],billCount : respond.length, billRate : respond.filter((v)=>{return v.generalResult=="원안가결"||v.generalResult=="수정가결"||v.generalResult=="대안반영폐기"}).length})
+   }catch (err) {
+    console.log(err)
+  }finally{
+    connection.release();
+  }
+}
 module.exports = {
   getAllPeople,
   getMainAttendData,
   getSubAttendData,
-  getAttendRate
+  getAttendRate,
+  grade
 };

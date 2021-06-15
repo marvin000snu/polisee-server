@@ -78,10 +78,12 @@ const preview = async function (req, res, next) {
 }
 
 
+
+
 module.exports = {
   search,
   lead,
   team,
   vote,
-  preview
+  preview,
 };
