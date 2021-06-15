@@ -132,29 +132,53 @@ const party = async function (req, res, next) {
 };
 const hashtag = async function (req, res, next) {
   const connection = await Pool.getConnection();
-  try{
+  try {
     const id = req.params.id;
-    const [[result]] = await connection.query("SELECT `hash-tag` FROM LAWDATA.law where billId=?",[id])
+    const [
+      [result]
+    ] = await connection.query(
+      "SELECT `hash-tag` FROM LAWDATA.law where billId=?",
+      [id]
+    );
     res.status(200).json(result);
-  }catch (err) {
+  } catch (err) {
     console.log(err);
-  }finally{
+  } finally {
     connection.release();
   }
-}
+};
 
-const getLawInfo = async function (req, res, next){
+const getLawInfo = async function (req, res, next) {
   const connection = await Pool.getConnection();
-  try{
+  try {
     const id = req.params.id;
-    const [[result]] = await connection.query("SELECT * FROM LAWDATA.law where billId=?",[id])
-    res.status(200).json(result)
-  }catch (err) {
-    console.log(err)
-  }finally{
+    const [
+      [result]
+    ] = await connection.query("SELECT * FROM LAWDATA.law where billId=?", [
+      id
+    ]);
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+  } finally {
     connection.release();
   }
-}
+};
+
+const searchByHashtag = async function (req, res, next) {
+  const connection = await Pool.getConnection();
+  try {
+    const key = req.params.key;
+    const [result] = await connection.query(
+      "SELECT * FROM LAWDATA.law WHERE law.`hash-tag` LIKE '%" + key + "%'"
+    );
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+  } finally {
+    connection.release();
+  }
+};
 module.exports = {
   search,
   lead,
@@ -164,5 +188,6 @@ module.exports = {
   today,
   party,
   hashtag,
-  getLawInfo
+  getLawInfo,
+  searchByHashtag
 };

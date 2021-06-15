@@ -10,7 +10,8 @@ const {
   today,
   party,
   hashtag,
-  getLawInfo
+  getLawInfo,
+  searchByHashtag
 } = require("../controller/law-controller");
 
 router.get("/search/:key", search);
@@ -22,7 +23,7 @@ router.get("/today", today);
 router.get("/party", party);
 router.get("/hashtag/:id", hashtag);
 router.get("/getLawInfo/:id", getLawInfo);
-
+router.get("/searchByHashtag/:key",searchByHashtag)
 router.use("/", (err, req, res, next) => {
   next(err);
 });
