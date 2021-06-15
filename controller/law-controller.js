@@ -130,7 +130,18 @@ const party = async function (req, res, next) {
     connection.release();
   }
 };
-
+const hashtag = async function (req, res, next) {
+  const connection = await Pool.getConnection();
+  try{
+    const id = req.params.id;
+    const [[result]] = await connection.query("SELECT `hash-tag` FROM LAWDATA.law where billId=?",[id])
+    res.status(200).json(result);
+  }catch (err) {
+    console.log(err);
+  }finally{
+    connection.release();
+  }
+}
 module.exports = {
   search,
   lead,
@@ -138,5 +149,6 @@ module.exports = {
   vote,
   preview,
   today,
-  party
+  party,
+  hashtag
 };
