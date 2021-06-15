@@ -147,9 +147,10 @@ const getLawInfo = async function (req, res, next){
   const connection = await Pool.getConnection();
   try{
     const id = req.params.id;
-  }catch (err) {
     const [[result]] = await connection.query("SELECT * FROM LAWDATA.law where billId=?",[id])
     res.status(200).json(result)
+  }catch (err) {
+    console.log(err)
   }finally{
     connection.release();
   }
