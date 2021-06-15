@@ -75,10 +75,23 @@ const grade = async function (req, res, next) {
     connection.release();
   }
 }
+
+const attendAll = async function (req, res, next) {
+  const connection = await Pool.getConnection();
+  try{
+    const [response] = await connection.query("SELECT `id`, `sub-attend-rate`, `main-attend-rate` FROM LAWDATA.people")
+    res.status(200).json(response)
+  }catch (err) {
+    console.log(err)
+  }finally{
+    connection.release();
+  }
+}
 module.exports = {
   getAllPeople,
   getMainAttendData,
   getSubAttendData,
   getAttendRate,
-  grade
+  grade,
+  attendAll
 };
